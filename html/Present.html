@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<HTML lang="de">
+<HEAD>
+	<META charset="utf-8">
+	<TITLE>Messwerte-Verlauf</TITLE>
+    <script src="https://www.gstatic.com/charts/loader.js"></script>
+	<script src="./config.js"></script>
+	<script>
+	
+	var StartVal = 848;
+	var PricePer_kWh = 0.04675;
+	var zVal = 0.9374;
+	var HeatVal = 11.29;
+	var anticipated_per_month = 128;
+	
+	function calcCost(tab) {
+		let tbl = tab.rows;
+		let cur = tbl[tbl.length-1][1];
+		return (cur - StartVal) * HeatVal * PricePer_kWh * zVal * 1.19;
+	}
+		
+	
+	var default_options = {
+			width: 900,
+			height: 500,
+			series: {/*
+				0: {axis: 'Temp'},
+				1: {axis: 'Relative'},
+				2: {axis: 'Relative'}*/
+			},/*
+			axes: {
+				Temp: {label: 'Temperatur'},
+				Relative: {label: 'Relativwert'}
+			},*/
+			hAxis: {
+				format:'d.M.yyyy H:mm',
+				timezone: +1
+			}
+		};
+	
+	function makeTable(tabs) {
+		let data = new google.visualization.DataTable();
+		// all tables must have the same first column of type date,
+		// and one column (of type number)
+		if (tabs[0].cols[0][1] in Config){
+			tabs[0].cols[0][1] = Config[tabs[0].cols[0][1]]["name"];
+		}		
+		data.addColumn(tabs[0].cols[0][0], tabs[0].cols[0][1]);
+		for (let tab of tabs) {
+			if (tab.cols[1][1] in Config){
+				tab.cols[1][1] = Config[tab.cols[1][1]]["name"];
+			}		
+			data.addColumn(tab.cols[1][0], tab.cols[1][1]);
+		}
+		let i=1;
+		for (let tab of tabs) {
+			tab.rows.forEach(r => {
+				let Row = new Array(tabs.length+1);
+				Row[0] = new Date(r[0]);
+				Row[i] = r[1];
+				data.addRow(Row);
+			});
+			i++;
+		}
+		return data;
+	}
+	
+	function drawChart(data, id, ttl, sttl, options = default_options) {
+		options.chart = {title: ttl, subtitle: sttl};
+		let chart = new google.charts.Line(document.getElementById(id));
+		chart.draw(data, google.charts.Line.convertOptions(options));
+	}
+	
+	function drawColumns(data, id, ttl, sttl, options = default_options) {
+		options.chart = {title: ttl, subtitle: sttl};
+		options.hAxis = {format:'d.M.yyyy'};
+		options.bars = 'vertical';
+	    let chart = new google.charts.Bar(document.getElementById(id));
+	    chart.draw(data, google.charts.Bar.convertOptions(options));
+	}
+		
+	function fetchData(uri){
+		return new Promise((resolve, reject) => {		
+			fetch(uri)
+				.then(res => {
+						if (res.ok) {
+							resolve(res.json());
+						} else {
+							reject(res.statusText);
+						}
+					});
+	
+				}) 
+				.catch(err =>{
+					alert("Did not receive json data: " + err);
+				});	
+	}
+	
+	function loadPackage() {
+		google.load('visualization', 'current', {'packages':['bar', 'line', 'linechart']});
+		google.charts.setOnLoadCallback(loadAndDraw);	
+	}
+	
+	function loadAndDraw() {
+		fetchData("./cgi-bin/present_cgi.py?drq=G")
+			.then(jdat => {
+				return new Promise((resolve) => {
+					let d = new Date();
+					let months = d.getMonth();
+					let anti = months * 128;
+					let base = months * (174.84-37.82) / 12;
+					let cur = calcCost(jdat) + base;
+					document.getElementById("summary").innerHTML = 
+						`Die Kosten seit 1.1.2022 betragen etwa <b>${cur.toFixed(2)} €</b> (inkl. MwSt.und Grundpreis).<br>` + 
+						`Bis jetzt wurden <b>${anti}€</b> Abschlag für Erdgas bezahlt.`;
+					let opts=structuredClone(default_options);
+					opts.vAxis = {format: '####.###'};
+					let data = makeTable([jdat]);
+					drawChart(data, 'Gasverbrauch', 'Gasverbrauch', '(m³)', opts);
+					resolve();
+				});
+			});
+		let DProm = fetchData("./cgi-bin/present_cgi.py?drq=D");
+		let XProm = fetchData("./cgi-bin/present_cgi.py?drq=X");
+		Promise.all([DProm, XProm])
+			.then((tabs) => {
+				let opts = structuredClone(default_options);
+				opts.series = {
+					0: {axis: 'Verbrauch'},
+					1: {axis: 'Temperatur'}
+				};
+				opts.axes = {
+					y: {
+						Verbrauch: {label: 'Gasverbrauch (m³)'},
+						Temperatur: {label: 'Temperatur (°C)', side: 'right'}
+					}
+				};
+				data = makeTable(tabs);
+				drawColumns(data, 'GasTag', 
+				'Gasverbrauch und Aussentemperatur', 
+				'(pro Tag)', opts);
+			});
+	}	
+	
+	loadPackage();
+	</script>
+</HEAD>
+<BODY>
+<h4>Berechnung</h4>
+<p>Laut Rechnung für 2021 entspricht ein m³ 10.55 bis 10.59 kWh.<br>
+Der Zählerstand am 31.12.2022 wurde mit 848 m³ angegegeben.<br>
+Am 30.9.2022 habe ich den Zählerstand 2066 m³ gemeldet.</p>
+<p>Bis zum 1.10.2022 kostet die kWh 4.675 Cent ohne MwSt. und Grundpreis.</p>
+<p id ="summary"></p>
+<p><a href="Present2.html">Detail-Charts</a></p>
+<div id="Gasverbrauch"></div>
+<div id="GasTag"></div>
+<div id="Luftdruck"></div>
+<div id="Raumklima"></div>
+<div id="Feuchtigkeit"></div>
+<div id="Ambient"></div>
+</body>
+</html>

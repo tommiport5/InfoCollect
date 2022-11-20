@@ -1,3 +1,5 @@
+# My local-only files
+Arduino/esp8266_climate_sh21/local.h
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
