@@ -21,18 +21,21 @@ for the presentation. Here are some screenshots from this sample implementation:
 ### Requirements
 Apart from the camera and controller from the [AI-on the edge-device](https://github.com/jomjol/AI-on-the-edge-device) project, you need:
 - A Raspberry Pi
+	
 	I use a Raspi 2 B with raspbian buster, that's way enough. It comes with python 3.7 which is ok too.
 - A Webserver on this machine
+	
 	I use lighttpd. nginx should do as well, Apache could be too big for the raspi.
 - A MQTT Broker
+	
 	I use mosquitto [https://mosquitto.org/](https://mosquitto.org/)
 - paho-mqtt 1.6, a mqtt client library for python
 
 If you want to gather the climate data, you can use an ESP8266 module which is wired like this:
 
-![sensor_module schematic](/assets/sensor_module.pdf)
+[sensor_module schematic](/assets/sensor_module.pdf)
 
-I used an ESP8266-12F, but thats a bit tricky because of the unusual grid of the I/O pads.
+I use an ESP8266-12F, but thats a bit tricky because of the unusual grid of the I/O pads.
 
 ### Installation
 to be done
