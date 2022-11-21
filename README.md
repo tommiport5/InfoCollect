@@ -31,9 +31,8 @@ Apart from the camera and controller from the [AI-on the edge-device](https://gi
 	I use mosquitto [https://mosquitto.org/](https://mosquitto.org/)
 - paho-mqtt 1.6, a mqtt client library for python
 
-If you want to gather the climate data, you can use an ESP8266 module which is wired like this:
+If you want to gather the climate data, you can use an ESP8266 module which is wired like this: [sensor_module schematic](/assets/sensor_module.pdf)
 
-[sensor_module schematic](/assets/sensor_module.pdf)
 To the connector labelled BMP280 you can connect any of the various BME280, BMP280 or SHT21 sensor modules via I2C Bus. The provide temperature, humidity or atmosphreric pressure in
 various combinations. The corresponding Arduino code can be found in the Arduino directory. This hardware can be powered by two AA (Mignon) AlMn  batteries for several months, because
 it usually is in deep sleep and awakes only every 5 minutes to send one set of values via WLAN.
