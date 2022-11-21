@@ -5,21 +5,8 @@
 	<TITLE>Messwerte-Verlauf</TITLE>
     <script src="https://www.gstatic.com/charts/loader.js"></script>
 	<script src="./config.js"></script>
-	<script>
-	
-	var StartVal = 848;
-	var PricePer_kWh = 0.04675;
-	var zVal = 0.9374;
-	var HeatVal = 11.29;
-	var anticipated_per_month = 128;
-	
-	function calcCost(tab) {
-		let tbl = tab.rows;
-		let cur = tbl[tbl.length-1][1];
-		return (cur - StartVal) * HeatVal * PricePer_kWh * zVal * 1.19;
-	}
-		
-	
+	<script src="./summary.js"></script>
+	<script>	
 	var default_options = {
 			width: 900,
 			height: 500,
@@ -106,13 +93,9 @@
 			.then(jdat => {
 				return new Promise((resolve) => {
 					let d = new Date();
-					let months = d.getMonth();
-					let anti = months * 128;
-					let base = months * (174.84-37.82) / 12;
-					let cur = calcCost(jdat) + base;
-					document.getElementById("summary").innerHTML = 
-						`Die Kosten seit 1.1.2022 betragen etwa <b>${cur.toFixed(2)} €</b> (inkl. MwSt.und Grundpreis).<br>` + 
-						`Bis jetzt wurden <b>${anti}€</b> Abschlag für Erdgas bezahlt.`;
+					if (typeof calcCost == "function") {
+						document.getElementById("summary").innerHTML = calcCost(jdata);
+					}
 					let opts=structuredClone(default_options);
 					opts.vAxis = {format: '####.###'};
 					let data = makeTable([jdat]);
@@ -146,12 +129,7 @@
 	</script>
 </HEAD>
 <BODY>
-<h4>Berechnung</h4>
-<p>Laut Rechnung für 2021 entspricht ein m³ 10.55 bis 10.59 kWh.<br>
-Der Zählerstand am 31.12.2022 wurde mit 848 m³ angegegeben.<br>
-Am 30.9.2022 habe ich den Zählerstand 2066 m³ gemeldet.</p>
-<p>Bis zum 1.10.2022 kostet die kWh 4.675 Cent ohne MwSt. und Grundpreis.</p>
-<p id ="summary"></p>
+<div id ="summary"></div>
 <p><a href="Present2.html">Detail-Charts</a></p>
 <div id="Gasverbrauch"></div>
 <div id="GasTag"></div>
