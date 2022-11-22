@@ -40,6 +40,7 @@ it usually is in deep sleep and awakes only every 5 minutes to send one set of v
 I use an ESP8266-12F, but thats a bit tricky because of the unusual grid of the I/O pads.
 
 ### Installation
+<!--
 1. Build the [AI-on the edge-device](https://github.com/jomjol/AI-on-the-edge-device) project up to the point that you can see your agasmeter in yout browser and verify
 the reading.
 2. Install the MQTT broker and web browser on the Raspi. Add your raspi user to the group www-data.
@@ -49,6 +50,8 @@ Now you can start the InfoCollect processes with
 ```
 sudo systemctl start infocollect
 ```
+-->
+tbd
 
 ### Comming up
 #### Analyze the correlation between outside temperature and gas consumation
