@@ -1,0 +1,15 @@
+[Unit]
+Description=InfoCollect data collection
+After=network.target
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+User=dad
+WorkingDirectory=~
+Environment="PYTHONPATH=$PYTHONPATH:/usr/local/share/python"
+ExecStart=/usr/bin/python3  /usr/local/share/python/InfoCollect/daemon.py /usr/local/share/python/InfoCollect
+
+[Install]
+WantedBy=multi-user.target
+
