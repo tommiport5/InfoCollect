@@ -15,6 +15,7 @@ var mwst = 1.19;					// tax factor
 var anual_base = 174.84-37.82;		// base price per year								
 
 function calcCost(tab) {
+	let d = new Date();
 	let months = d.getMonth();
 	let anti = months * anticipated_per_month;
 	let base = months *  anual_base / 12;

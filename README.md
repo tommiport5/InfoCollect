@@ -47,6 +47,7 @@ the reading.
 
 Now you can start the InfoCollect processes with
 ```
+sudo systemctl daemon-reload
 sudo systemctl start infocollect
 ```
 

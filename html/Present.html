@@ -92,9 +92,8 @@
 		fetchData("./cgi-bin/present_cgi.py?drq=G")
 			.then(jdat => {
 				return new Promise((resolve) => {
-					let d = new Date();
 					if (typeof calcCost == "function") {
-						document.getElementById("summary").innerHTML = calcCost(jdata);
+						document.getElementById("summary").innerHTML = calcCost(jdat);
 					}
 					let opts=structuredClone(default_options);
 					opts.vAxis = {format: '####.###'};
@@ -102,26 +101,31 @@
 					drawChart(data, 'Gasverbrauch', 'Gasverbrauch', '(m³)', opts);
 					resolve();
 				});
-			});
-		let DProm = fetchData("./cgi-bin/present_cgi.py?drq=D");
-		let XProm = fetchData("./cgi-bin/present_cgi.py?drq=X");
-		Promise.all([DProm, XProm])
-			.then((tabs) => {
-				let opts = structuredClone(default_options);
-				opts.series = {
-					0: {axis: 'Verbrauch'},
-					1: {axis: 'Temperatur'}
-				};
-				opts.axes = {
-					y: {
-						Verbrauch: {label: 'Gasverbrauch (m³)'},
-						Temperatur: {label: 'Temperatur (°C)', side: 'right'}
-					}
-				};
-				data = makeTable(tabs);
-				drawColumns(data, 'GasTag', 
-				'Gasverbrauch und Aussentemperatur', 
-				'(pro Tag)', opts);
+			})
+			.then(() => {
+				return new Promise((resolve) => {
+					let DProm = fetchData("./cgi-bin/present_cgi.py?drq=D");
+					let XProm = fetchData("./cgi-bin/present_cgi.py?drq=X");
+					Promise.all([DProm, XProm])
+						.then((tabs) => {
+							let opts = structuredClone(default_options);
+							opts.series = {
+								0: {axis: 'Verbrauch'},
+								1: {axis: 'Temperatur'}
+							};
+							opts.axes = {
+								y: {
+									Verbrauch: {label: 'Gasverbrauch (m³)'},
+									Temperatur: {label: 'Temperatur (°C)', side: 'right'}
+								}
+							};
+							data = makeTable(tabs);
+							drawColumns(data, 'GasTag', 
+							'Gasverbrauch und Aussentemperatur', 
+							'(pro Tag)', opts);
+							resolve();
+						});
+				});
 			});
 	}	
 	
