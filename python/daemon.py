@@ -11,7 +11,7 @@ from pathlib import Path
 import signal
 from threading import Condition
 import socket
-from InfoCollect import LOCAL_ADDR, Socket2, ComPath, App
+from InfoCollect import LOCAL_ADDR, Socket2, ComPath, App, Version
 import logging
 import os.path
 
@@ -40,11 +40,14 @@ def KillCatcher(signum, frame):
     term.release()
     
 if __name__ == '__main__':
+    if len(sys.argv) > 1 and (sys.argv[1] == "-v" or sys.argv[1] == "--version"):
+        print(Version)
+        sys.exit(0)
     if len(sys.argv) > 1:
         path = Path(sys.argv[1])
     else:
         path = Path.cwd()
-    Log.debug("starting infocollect ...")
+    Log.debug("starting infocollect version {}...".format(Version))
     daemon1 = subprocess.Popen((sys.executable, path / "daemon1.py"))
     aggregator = subprocess.Popen((sys.executable, path / "aggregator.py")) # can be terminated with SIGUSR1 or mqtt cmd
     daemon2 = subprocess.Popen((sys.executable, path / "daemon2.py"))

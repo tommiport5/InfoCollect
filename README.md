@@ -1,4 +1,4 @@
-## InfoCollect
+## InfoCollect <!--Version=-->"1.0"
 InfoCollect provides an environment for collecting and visualising climate and resource consumption data of your home. 
 
 It is based on the project [AI-on the edge-device](https://github.com/jomjol/AI-on-the-edge-device) by @jomjol which also appeared in Make magazine 4 / 2021.
@@ -55,7 +55,7 @@ sudo systemctl start infocollect
 ### Comming up
 #### Analyze the correlation between outside temperature and gas consumation
 I will use pandas and scikit-learn for that
-#### Prepare an installation script
+#### Prepare an installation script :heavy_check_mark:
 #### Integrate the electricity meter
 I got some ideas for that from [this video](https://www.youtube.com/watch?v=l99ZXvqqBRY&list=FLW6Zg6QSCuyhSc68cUOKlCA&index=1&t=1115s)
 

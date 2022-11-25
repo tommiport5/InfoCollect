@@ -14,8 +14,9 @@ import json
 from datetime import datetime, timedelta, date
 import select
 import socket
+import sys
 
-from InfoCollect import LOCAL_ADDR, ComPath, App, File
+from InfoCollect import LOCAL_ADDR, ComPath, App, File, Version
 from InfoCollect import djson
 from config import Config
 from multiprocessing import Lock, Condition
@@ -255,8 +256,11 @@ def calculateDaily(src, dst, newValFunc, requireDate=True):
         Mutex[dst].release()
         
 if __name__ == '__main__':
+    if len(sys.argv) > 1 and (sys.argv[1] == "-v" or sys.argv[1] == "--version"):
+        print(Version)
+        sys.exit(0)
     # create a thread that subscribes to the mqtt messages
-    Log.info("server started")
+    Log.info("daemon1 version {} started".format(Version))
     mqttc = mqtt.Client()
     connectMQTT(mqttc)
     Finished = False

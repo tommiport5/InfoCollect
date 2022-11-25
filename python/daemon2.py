@@ -14,8 +14,9 @@ import json
 from datetime import datetime, timedelta, date
 import select
 import socket
+import sys
 
-from InfoCollect import Socket2, ComPath, App, File
+from InfoCollect import Socket2, ComPath, App, File, Version
 from InfoCollect import djson
 from InfoCollect import mutex as Mutex
 from multiprocessing import Lock, Condition
@@ -222,10 +223,13 @@ def on_press(_client, _userdata, message):
     storeContent('P', message)
         
 if __name__ == '__main__':
+    if len(sys.argv) > 1 and (sys.argv[1] == "-v" or sys.argv[1] == "--version"):
+        print(Version)
+        sys.exit(0)
     # start the aggregator as a separate process
     # os.system("python3 aggregator.py") better have all the subprocesses started by daemon.py
     # create a thread that subscribes to the mqtt messages
-    Log.info("server started")
+    Log.info("daemon2 version {} started".format(Version))
     mqttc = mqtt.Client()
     connectMQTT(mqttc)
     Finished = False

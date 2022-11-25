@@ -11,8 +11,9 @@ import logging
 import re
 from threading import Condition
 from datetime import datetime
-from InfoCollect import djson, ComPath
+from InfoCollect import djson, ComPath, Version
 import signal
+import sys
 
 App = "aggregator"
 
@@ -88,8 +89,11 @@ def Terminator(_signum, _frame):
     Quit.release()
     
 if __name__ == '__main__':
+    if len(sys.argv) > 1 and (sys.argv[1] == "-v" or sys.argv[1] == "--version"):
+        print(Version)
+        sys.exit(0)
     # create a thread that subscribes to the mqtt messages
-    Log.info("aggregator started")
+    Log.info("aggregator version {} started".format(Version))
     connectMQTT()
     signal.signal(signal.SIGTERM, Terminator)  
     Quit.acquire()
