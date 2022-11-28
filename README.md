@@ -53,7 +53,7 @@ sudo systemctl start infocollect
 
 
 ### Comming up
-#### Analyze the correlation between outside temperature and gas consumation
+#### Analyze the correlation between outside temperature and gas consumation :construction_worker:
 I will use pandas and scikit-learn for that
 #### Prepare an installation script :heavy_check_mark:
 #### Integrate the electricity meter
