@@ -41,6 +41,7 @@ if __name__ == '__main__':
     else:
         drq = str(pars.getvalue('drq'))
     Log.debug('cgi invoked with par ' + drq)
+    print('Access-Control-Allow-Origin: *')
     print('Content-Type: application/json')
     print('Cache-Control: no-cache')
     sock = socket.socket()

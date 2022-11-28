@@ -83,7 +83,7 @@ def on_cmd(_client, _userdata, message):
     Quit.release()
     
 def Terminator(_signum, _frame):
-    Log.debug("Received signal from starter process".format(message.payload))
+    Log.debug("Received signal from starter process")
     Quit.acquire()
     Quit.notify()
     Quit.release()

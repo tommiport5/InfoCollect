@@ -1,4 +1,4 @@
-## InfoCollect <!--Version=-->"1.0"
+## InfoCollect <!--Version=-->"1.0.1"
 InfoCollect provides an environment for collecting and visualising climate and resource consumption data of your home. 
 
 It is based on the project [AI-on the edge-device](https://github.com/jomjol/AI-on-the-edge-device) by @jomjol which also appeared in Make magazine 4 / 2021.

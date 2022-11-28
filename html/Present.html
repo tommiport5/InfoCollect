@@ -85,14 +85,10 @@
 	
 	function loadPackage() {
 		google.load('visualization', 'current', {'packages':['bar', 'line', 'linechart']});
-		google.charts.setOnLoadCallback(lad);	
+		google.charts.setOnLoadCallback(loadAndDraw);	
 	}
 	
-	async function lad() {
-		await loadAndDraw();
-	}
-	
-	async function loadAndDraw() {
+	function loadAndDraw() {
 		fetchData("./cgi-bin/present_cgi.py?drq=G")
 			.then(jdat => {
 				return new Promise((resolve) => {
