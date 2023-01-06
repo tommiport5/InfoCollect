@@ -203,13 +203,17 @@ def averageForToday(act_dat):
     Aussen = lookupAussen()
     if not Aussen: return None
     sum = 0
-    count = 0
+    Prev = None
+    First = None
     for point in act_dat:
         if point["sender"] == Aussen:
-            sum += point["val"]
-            count += 1
-    if count == 0: return None
-    else: return [date.today(), sum / count]
+            if Prev == None:
+                First = Prev = point["dt"]
+            else:
+                sum += point["val"] * (point["dt"] - Prev).total_seconds()
+                Prev = point["dt"]
+    if Prev == None or Prev == First: return None
+    else: return [date.today(), sum / (Prev - First).total_seconds()]
 
 def deltaForToday(act_dat):
         last = act_dat[-1]

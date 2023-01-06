@@ -5,12 +5,11 @@ collect is the cgi-script that delivers the daemons data to the web server
 @author: Dad
 '''
 import socket
-import cgi
-import cgitb
 import logging
 
 # this also works, if the module is started without the PYTHONPATH set
 import sys
+import os
 import pathlib as p
 import importlib
 
@@ -34,14 +33,22 @@ def other():
     
 
 if __name__ == '__main__':
-    cgitb.enable(display=0, logdir=common.ComPath)
-    pars = cgi.FieldStorage()
+    pars = {}
+    if 'QUERY_STRING' in os.environ:
+        params = os.environ['QUERY_STRING'].split('&')
+        pars = {p.split('=')[0] : p.split('=')[1] for p in params}
     if not 'drq' in pars:
-        drq ='d'
+        drq ='X'
     else:
-        drq = str(pars.getvalue('drq'))
+        drq = pars['drq']
     Log.debug('cgi invoked with par ' + drq)
     print('Access-Control-Allow-Origin: *')
+    print("Access-Control-Allow-Methods: GET")
+    print("Access-Control-Allow-Credentials: true")
+    print('Access-Control-Allow-Private-Network: true')
+    print('Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept')
+    if os.environ['REQUEST_METHOD']  == "OPTIONS":
+        sys.exit(0)
     print('Content-Type: application/json')
     print('Cache-Control: no-cache')
     sock = socket.socket()

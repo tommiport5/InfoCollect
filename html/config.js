@@ -1,7 +1,7 @@
 /**
  * config.js
  * contains the config object in js (not json!) format.
- + It is loaded vi html script - dircetive because it must be present
+ + It is loaded vi html script directly, because it must be present
  * before the "fetched" data arrive
  * !SYNCHRONIZE THIS WITH config.py IN THE PYTHON DIRECTORY!
  */
