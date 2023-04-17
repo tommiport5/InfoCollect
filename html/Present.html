@@ -104,8 +104,8 @@
 			})
 			.then(() => {
 				return new Promise((resolve) => {
-					let DProm = fetchData("./cgi-bin/present_cgi.py?drq=D");
-					let XProm = fetchData("./cgi-bin/present_cgi.py?drq=X");
+					let DProm = fetchData("./cgi-bin//present_cgi.py?drq=D");
+					let XProm = fetchData("./cgi-bin//present_cgi.py?drq=X");
 					Promise.all([DProm, XProm])
 						.then((tabs) => {
 							let opts = structuredClone(default_options);
@@ -137,6 +137,7 @@
 <p><a href="Present2.html">Detail-Charts</a></p>
 <div id="Gasverbrauch"></div>
 <div id="GasTag"></div>
+<img src="eval.png" alt="Gasverbrauch über Temperatur">
 <div id="Luftdruck"></div>
 <div id="Raumklima"></div>
 <div id="Feuchtigkeit"></div>
