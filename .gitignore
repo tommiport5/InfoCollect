@@ -1,5 +1,6 @@
 # My local-only files
 Arduino/esp8266_climate_sh21/local.h
+Arduino/esp8266_climate_bme280/local.h
 html/summary.js
 python/info.py
 python/closeServer.py
