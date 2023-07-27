@@ -7,8 +7,8 @@
 """
  
 Config = {"807D3AFDE134": {"name": "Keller", "color": "green"},
-            "807D3AFDE135": {"name": "Esszimmer", "color": "red"},
-            "807D3AFDE136": {"name": "Aussen", "color": "blue"},
+            "807D3AFDE135": {"name": "Aussen", "color": "red"},
+            "807D3AFDE136": {"name": "Esszimmer", "color": "blue"},
             "VOL": {"name": "Volumen (m³)"},                
             "DTL": {"name": "täglicher Zählerstand"},
             "AVG": {"name": "Temperaturmittelwert (°C)"},

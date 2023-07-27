@@ -6,6 +6,7 @@
     <script src="https://www.gstatic.com/charts/loader.js"></script>
 	<script src="./config.js"></script>
 	<script src="./summary.js"></script>
+	<script src="./consumption.js"></script>
 	<script>	
 	var default_options = {
 			width: 900,
@@ -52,10 +53,51 @@
 		return data;
 	}
 	
+	var dayChart;
+	var dayTable;
+	var First;
+	
+	function calcReduction(lower, higher) {
+		let low = lower.delta(new Consumption(dayTable.getValue(0,0), dayTable.getValue(0,1)));
+		let middle = higher.delta(lower);
+		let last = dayTable.getNumberOfRows()-1;
+		let high = new Consumption(dayTable.getValue(last,0), dayTable.getValue(last,1)).delta(higher);
+		let reg = low.sum(high).value / low.sum(high).date.valueOf();
+		let dec = middle.value / middle.date.valueOf();
+		let without = reg * 24 * 60 * 60 * 1000;
+		let actual = new Consumption(dayTable.getValue(last,0), dayTable.getValue(last,1))
+			.delta(new Consumption(dayTable.getValue(0,0), dayTable.getValue(0,1))).value;
+		let perc = (1.0 - actual / without) * 100.0;
+		let red = (1.0 - dec / reg) * 100.0
+		First = undefined;
+		return {reduction: red, saving: perc};
+	}
+		
+	function selectHandler() {
+		let red;
+		const sel = dayChart.getSelection();
+		const item = sel[0];
+		const dat = dayTable.getValue(item.row,0);
+		const val = dayTable.getValue(item.row,1);
+		if (First === undefined) {
+			First = new Consumption(dat, val)
+		} else {
+			const Now = new Consumption(dat, val);
+			if (Now.less(First)) {
+				red = calcReduction(Now, First);
+			} else {
+				red = calcReduction(First, Now);
+			}
+			alert("Zwischen den Messpunkten werden " + red.reduction.toFixed(1) + 
+				" % des Gasvolumens pro Zeiteinheit weniger verbraucht.\nGesamtersparnis: " + red.saving.toFixed(1) + " %");
+		}
+	}
+	
 	function drawChart(data, id, ttl, sttl, options = default_options) {
 		options.chart = {title: ttl, subtitle: sttl};
 		let chart = new google.charts.Line(document.getElementById(id));
 		chart.draw(data, google.charts.Line.convertOptions(options));
+		return chart;
 	}
 	
 	function drawColumns(data, id, ttl, sttl, options = default_options) {
@@ -98,7 +140,9 @@
 					let opts=structuredClone(default_options);
 					opts.vAxis = {format: '####.###'};
 					let data = makeTable([jdat]);
-					drawChart(data, 'Gasverbrauch', 'Gasverbrauch', '(m³)', opts);
+					dayTable = data;
+					dayChart = drawChart(data, 'Gasverbrauch', 'Gasverbrauch', '(m³)', opts);
+					google.visualization.events.addListener(dayChart, 'select', selectHandler);
 					resolve();
 				});
 			})
@@ -137,7 +181,10 @@
 <p><a href="Present2.html">Detail-Charts</a></p>
 <div id="Gasverbrauch"></div>
 <div id="GasTag"></div>
-<img src="eval.png" alt="Gasverbrauch über Temperatur">
+<span>
+<figure><img src="summer.png" alt="Gasverbrauch über Temperatur"><figcaption>Sommer</figcaption></figure>
+<figure><img src="winter.png" alt="Gasverbrauch über Temperatur"><figcaption>Winter</figcaption></figure>
+</span>
 <div id="Luftdruck"></div>
 <div id="Raumklima"></div>
 <div id="Feuchtigkeit"></div>

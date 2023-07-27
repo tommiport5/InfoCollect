@@ -116,11 +116,11 @@ def sendAnswer(conn, req):
         Log.debug('Trying to read ' + fpath)
         with open(fpath) as DatFile:
             Trans = json.load(DatFile, object_hook=djson.datetime_decoder)
-    except OSError:
-        Log.warn("Sending empty " + fpath)
+        Sorted = json.dumps(resort(Trans, Text[req]), cls=djson.DateTimeJSONEncoder)
+    except Exception as ex:
+        Sorted = fpath + " is not valid json (maybe empty)"
+        Log.error(fpath + " raised exception " + str(ex))
     mut.release()
-    Sorted = json.dumps(resort(Trans, Text[req]), cls=djson.DateTimeJSONEncoder)
-    # print(Sorted)
     lng = len(Sorted)
     try:
         conn.sendall(bytes("L{:06d};".format(lng),"UTF-8"))
@@ -249,7 +249,13 @@ def calculateDaily(src, dst, newValFunc, requireDate=True):
         if os.path.exists(ComPath + File[dst] + ".daily.json"):
             with open(ComPath + File[dst] + ".daily.json") as gdr:
                 cont = json.load(gdr, object_hook=djson.datetime_decoder)
-        cont.append(newValFunc(act_dat))
+        newVal = newValFunc(act_dat)
+        if not newVal:
+            Log.warning("No values for today in {}".format(File[src]))
+            return
+        # else:
+            #Log.info("Found value {} in {}".format(newVal, File[src] + ".json")) 
+        cont.append(newVal)
         # print(cont)
         with open(ComPath + File[dst] + ".daily.json","w") as gdw:
             json.dump(cont, gdw, cls=djson.DateTimeJSONEncoder)

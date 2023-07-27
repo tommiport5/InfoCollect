@@ -47,7 +47,7 @@ if __name__ == '__main__':
     print("Access-Control-Allow-Credentials: true")
     print('Access-Control-Allow-Private-Network: true')
     print('Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept')
-    if os.environ['REQUEST_METHOD']  == "OPTIONS":
+    if 'REQUEST_METHOD' in os.environ and os.environ['REQUEST_METHOD']  == "OPTIONS":
         sys.exit(0)
     print('Content-Type: application/json')
     print('Cache-Control: no-cache')
