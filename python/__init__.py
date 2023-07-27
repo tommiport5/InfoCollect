@@ -11,4 +11,4 @@ mutex = {'H':Lock(), 'A':Lock(), 'T':Lock(), 'L':Lock(),
          'X':Lock(), 'b': Lock()}
 
 # Don't break the regular expression for the autoincrement (see after_commit.py)
-Version="1.0.1"		 
+Version="1.1.0"		 
