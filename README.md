@@ -1,4 +1,4 @@
-## InfoCollect <!--Version=-->"1.1.0"
+## InfoCollect <!--Version=-->"1.1.1"
 InfoCollect provides an environment for collecting and visualising climate and resource consumption data of your home. 
 
 It is based on the project [AI-on the edge-device](https://github.com/jomjol/AI-on-the-edge-device) by @jomjol which also appeared in Make magazine 4 / 2021.
@@ -53,8 +53,10 @@ sudo systemctl start infocollect
 ```
 
 ### New in version 1.1
-1. Correlation betweenoutside temperature and gas consumation (separate for summer and winter, see eval.py)
+1. Correlation between outside temperature and gas consumation (separate for summer and winter, see eval.py)
 2. Support for Bosch BME280 sensor module (temperature, pressure and humidity)
+### New in version 1.1.1
+After one and a half year of using the system and the installation of a compeltely heating I made some corrections to the evaluation to make the effects of the new heating more transparent.
 
 ### Comming up
 #### Prepare an installation script :heavy_check_mark:

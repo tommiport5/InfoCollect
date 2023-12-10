@@ -7,7 +7,8 @@
 	<script src="./config.js"></script>
 	<script src="./summary.js"></script>
 	<script src="./consumption.js"></script>
-	<script>	
+	<script>
+var StartDate = new Date("2023-10-11");	
 	var default_options = {
 			width: 900,
 			height: 500,
@@ -43,10 +44,13 @@
 		let i=1;
 		for (let tab of tabs) {
 			tab.rows.forEach(r => {
-				let Row = new Array(tabs.length+1);
-				Row[0] = new Date(r[0]);
-				Row[i] = r[1];
-				data.addRow(Row);
+				let dt = new Date(r[0]);
+				if (dt.valueOf() >= StartDate.valueOf()) {
+					let Row = new Array(tabs.length+1);
+					Row[0] = dt;
+					Row[i] = r[1];
+					data.addRow(Row);
+				}
 			});
 			i++;
 		}
@@ -182,8 +186,9 @@
 <div id="Gasverbrauch"></div>
 <div id="GasTag"></div>
 <span>
-<figure><img src="summer.png" alt="Gasverbrauch über Temperatur"><figcaption>Sommer</figcaption></figure>
-<figure><img src="winter.png" alt="Gasverbrauch über Temperatur"><figcaption>Winter</figcaption></figure>
+<figure><img src="vaillant_summer.png" alt="Gasverbrauch über Temperatur"><figcaption>Sommer (Vaillant)</figcaption></figure>
+<figure><img src="vaillant_winter.png" alt="Gasverbrauch über Temperatur"><figcaption>Winter (Vaillant)</figcaption></figure>
+<figure><img src="viessmann_winter.png" alt="Gasverbrauch über Temperatur"><figcaption>Winter (Viessmann)</figcaption></figure>
 </span>
 <div id="Luftdruck"></div>
 <div id="Raumklima"></div>
